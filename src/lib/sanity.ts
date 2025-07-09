@@ -28,11 +28,9 @@ export interface StockItem {
   _id: string;
   _type: 'stockItem';
   name: string;
-  sku: string;
   category: string;
   quantity: number;
   minQuantity: number;
-  price: number;
   supplier?: string;
   description?: string;
   _createdAt: string;
