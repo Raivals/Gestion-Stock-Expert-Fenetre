@@ -17,9 +17,12 @@ export const StockForm: React.FC<StockFormProps> = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
+    sku: '',
     category: '',
     quantity: 0,
     minQuantity: 5,
+    price: 0,
+    supplier: '',
     description: '',
   });
 
@@ -27,9 +30,12 @@ export const StockForm: React.FC<StockFormProps> = ({
     if (item) {
       setFormData({
         name: item.name,
+        sku: item.sku,
         category: item.category,
         quantity: item.quantity,
         minQuantity: item.minQuantity,
+        price: item.price,
+        supplier: item.supplier || '',
         description: item.description || '',
       });
     }
@@ -51,14 +57,13 @@ export const StockForm: React.FC<StockFormProps> = ({
   };
 
   const categories = [
-    'Électronique',
-    'Vêtements',
-    'Alimentation',
-    'Maison',
-    'Jardin',
-    'Sport',
-    'Beauté',
-    'Autres',
+    'Electricité',
+    'Consommables',
+    'Visseries',
+    'Plats',
+    'Cornières',
+    'Finissions',
+    'Autres'
   ];
 
   return (
@@ -93,6 +98,21 @@ export const StockForm: React.FC<StockFormProps> = ({
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Ex: iPhone 15 Pro"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                SKU *
+              </label>
+              <input
+                type="text"
+                name="sku"
+                value={formData.sku}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Ex: IPH15PRO001"
               />
             </div>
 
@@ -141,6 +161,36 @@ export const StockForm: React.FC<StockFormProps> = ({
                 min="0"
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                Prix unitaire (€) *
+              </label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                min="0"
+                step="0.01"
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                Fournisseur
+              </label>
+              <input
+                type="text"
+                name="supplier"
+                value={formData.supplier}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Ex: Apple Inc."
               />
             </div>
 

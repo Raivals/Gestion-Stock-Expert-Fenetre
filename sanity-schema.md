@@ -28,13 +28,12 @@ export default {
       type: 'string',
       options: {
         list: [
-          { title: 'Électronique', value: 'Électronique' },
-          { title: 'Vêtements', value: 'Vêtements' },
-          { title: 'Alimentation', value: 'Alimentation' },
-          { title: 'Maison', value: 'Maison' },
-          { title: 'Jardin', value: 'Jardin' },
-          { title: 'Sport', value: 'Sport' },
-          { title: 'Beauté', value: 'Beauté' },
+           { title: 'Electricité', value: 'Electricité' },
+          { title: 'Consommables', value: 'Consommables' },
+          { title: 'Visseries', value: 'Visseries' },
+          { title: 'Plats', value: 'Plats' },
+          { title: 'Cornières', value: 'Cornières' },
+          { title: 'Finissions', value: 'Finissions' },
           { title: 'Autres', value: 'Autres' }
         ]
       },

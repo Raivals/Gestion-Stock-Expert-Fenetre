@@ -12,7 +12,6 @@ export const StockStats: React.FC<StockStatsProps> = ({ items }) => {
     inStock: items.filter(item => item.quantity > item.minQuantity).length,
     lowStock: items.filter(item => item.quantity > 0 && item.quantity <= item.minQuantity).length,
     outOfStock: items.filter(item => item.quantity === 0).length,
-    totalValue: items.reduce((sum, item) => sum + (item.quantity * item.price), 0),
   };
 
   const statCards = [

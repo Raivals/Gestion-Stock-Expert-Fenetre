@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Edit, Trash2, Eye, Package } from 'lucide-react';
+import { Edit, Trash2, Eye, Package, FileText } from 'lucide-react';
 import { StockItem } from '../lib/sanity';
 import { StockBadge } from './StockBadge';
 
@@ -18,12 +18,7 @@ export const StockTable: React.FC<StockTableProps> = ({
 }) => {
   const [selectedItem, setSelectedItem] = useState<StockItem | null>(null);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(price);
-  };
+
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -33,9 +28,7 @@ export const StockTable: React.FC<StockTableProps> = ({
     });
   };
 
-  const getTotalValue = (item: StockItem) => {
-    return item.quantity * item.price;
-  };
+
 
   if (loading) {
     return (
@@ -71,13 +64,16 @@ export const StockTable: React.FC<StockTableProps> = ({
                   Article
                 </th>
                 <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
-                  SKU
-                </th>
-                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Catégorie
                 </th>
                 <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Stock
+                </th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                  Quantité
+                </th>
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                  Description
                 </th>
                 <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Actions
@@ -89,7 +85,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                 <tr key={item._id} className="transition-colors hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-gray-900">
                           {item.name}
                         </div>
@@ -102,19 +98,32 @@ export const StockTable: React.FC<StockTableProps> = ({
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {item.sku}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {item.category}
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {item.category}
+                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StockBadge quantity={item.quantity} minQuantity={item.minQuantity} />
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {formatPrice(item.price)}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl font-bold text-gray-900">{item.quantity}</span>
+                      <div className="text-xs text-gray-500">
+                        <div>en stock</div>
+                        <div>min: {item.minQuantity}</div>
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                    {formatPrice(getTotalValue(item))}
+                  <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                    {item.description ? (
+                      <div className="max-w-xs">
+                        <p className="text-sm text-gray-900 truncate" title={item.description}>
+                          {item.description}
+                        </p>
+                      </div>
+                    ) : (
+                      <span className="text-sm italic text-gray-400">Aucune description</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                     <div className="flex items-center gap-2">
@@ -150,45 +159,48 @@ export const StockTable: React.FC<StockTableProps> = ({
 
       {/* Modal de détail */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50" onClick={() => setSelectedItem(null)}>
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-xl font-semibold">Détails de l'article</h2>
+              <div className="flex items-center gap-3">
+                <Package className="text-blue-600" size={24} />
+                <h2 className="text-xl font-semibold">Détails de l'article</h2>
+              </div>
               <button
                 onClick={() => setSelectedItem(null)}
                 className="text-gray-400 transition-colors hover:text-gray-600"
               >
-                <Eye size={24} />
+                ×
               </button>
             </div>
 
             <div className="p-6 space-y-4">
+              {/* En-tête avec nom et statut */}
+              <div className="pb-4 border-b">
+                <h3 className="mb-2 text-lg font-semibold text-gray-900">{selectedItem.name}</h3>
+                <div className="flex items-center gap-4">
+                  <StockBadge quantity={selectedItem.quantity} minQuantity={selectedItem.minQuantity} />
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {selectedItem.category}
+                  </span>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Nom</label>
-                  <p className="mt-1 text-sm text-gray-900">{selectedItem.name}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">SKU</label>
-                  <p className="mt-1 text-sm text-gray-900">{selectedItem.sku}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Catégorie</label>
-                  <p className="mt-1 text-sm text-gray-900">{selectedItem.category}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Stock</label>
-                  <div className="mt-1">
-                    <StockBadge quantity={selectedItem.quantity} minQuantity={selectedItem.minQuantity} />
+                  <label className="block text-sm font-medium text-gray-700">Quantité en stock</label>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="text-3xl font-bold text-gray-900">{selectedItem.quantity}</span>
+                    <span className="text-sm text-gray-500">unités</span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Prix unitaire</label>
-                  <p className="mt-1 text-sm text-gray-900">{formatPrice(selectedItem.price)}</p>
+                  <label className="block text-sm font-medium text-gray-700">Seuil minimum</label>
+                  <p className="mt-1 text-sm text-gray-900">{selectedItem.minQuantity} unités</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Valeur totale</label>
-                  <p className="mt-1 text-sm text-gray-900">{formatPrice(getTotalValue(selectedItem))}</p>
+                  <label className="block text-sm font-medium text-gray-700">Créé le</label>
+                  <p className="mt-1 text-sm text-gray-900">{formatDate(selectedItem._createdAt)}</p>
                 </div>
                 {selectedItem.supplier && (
                   <div>
@@ -196,16 +208,17 @@ export const StockTable: React.FC<StockTableProps> = ({
                     <p className="mt-1 text-sm text-gray-900">{selectedItem.supplier}</p>
                   </div>
                 )}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Créé le</label>
-                  <p className="mt-1 text-sm text-gray-900">{formatDate(selectedItem._createdAt)}</p>
-                </div>
               </div>
 
               {selectedItem.description && (
-                <div>
+                <div className="pt-4 border-t">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText size={16} className="text-gray-400" />
                   <label className="block text-sm font-medium text-gray-700">Description</label>
-                  <p className="mt-1 text-sm text-gray-900">{selectedItem.description}</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-gray-50">
+                    <p className="text-sm text-gray-900 whitespace-pre-wrap">{selectedItem.description}</p>
+                  </div>
                 </div>
               )}
             </div>
