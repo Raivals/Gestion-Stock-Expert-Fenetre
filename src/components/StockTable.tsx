@@ -39,9 +39,9 @@ export const StockTable: React.FC<StockTableProps> = ({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border">
+      <div className="bg-white border rounded-lg shadow-sm">
         <div className="p-8 text-center">
-          <Package className="mx-auto text-gray-400 mb-4" size={48} />
+          <Package className="mx-auto mb-4 text-gray-400" size={48} />
           <p className="text-gray-500">Chargement des articles...</p>
         </div>
       </div>
@@ -50,10 +50,10 @@ export const StockTable: React.FC<StockTableProps> = ({
 
   if (items.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border">
+      <div className="bg-white border rounded-lg shadow-sm">
         <div className="p-8 text-center">
-          <Package className="mx-auto text-gray-400 mb-4" size={48} />
-          <p className="text-gray-500 mb-2">Aucun article trouvé</p>
+          <Package className="mx-auto mb-4 text-gray-400" size={48} />
+          <p className="mb-2 text-gray-500">Aucun article trouvé</p>
           <p className="text-sm text-gray-400">Commencez par ajouter votre premier article</p>
         </div>
       </div>
@@ -62,37 +62,28 @@ export const StockTable: React.FC<StockTableProps> = ({
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+      <div className="overflow-hidden bg-white border rounded-lg shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Article
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  SKU
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Catégorie
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Stock
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Prix unitaire
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Valeur totale
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {items.map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50 transition-colors">
+                <tr key={item._id} className="transition-colors hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div>
@@ -107,40 +98,40 @@ export const StockTable: React.FC<StockTableProps> = ({
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                     {item.sku}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                     {item.category}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StockBadge quantity={item.quantity} minQuantity={item.minQuantity} />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                     {formatPrice(item.price)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                     {formatPrice(getTotalValue(item))}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setSelectedItem(item)}
-                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                        className="text-blue-600 transition-colors hover:text-blue-800"
                         title="Voir les détails"
                       >
                         <Eye size={16} />
                       </button>
                       <button
                         onClick={() => onEdit(item)}
-                        className="text-indigo-600 hover:text-indigo-800 transition-colors"
+                        className="text-indigo-600 transition-colors hover:text-indigo-800"
                         title="Modifier"
                       >
                         <Edit size={16} />
                       </button>
                       <button
                         onClick={() => onDelete(item._id)}
-                        className="text-red-600 hover:text-red-800 transition-colors"
+                        className="text-red-600 transition-colors hover:text-red-800"
                         title="Supprimer"
                       >
                         <Trash2 size={16} />
@@ -156,20 +147,20 @@ export const StockTable: React.FC<StockTableProps> = ({
 
       {/* Modal de détail */}
       {selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b">
               <h2 className="text-xl font-semibold">Détails de l'article</h2>
               <button
                 onClick={() => setSelectedItem(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 transition-colors hover:text-gray-600"
               >
                 <Eye size={24} />
               </button>
             </div>
 
             <div className="p-6 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Nom</label>
                   <p className="mt-1 text-sm text-gray-900">{selectedItem.name}</p>
