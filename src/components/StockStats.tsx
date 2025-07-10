@@ -87,7 +87,11 @@ export const StockStats: React.FC<StockStatsProps> = ({ items, activeFilter, onF
                   {stat.value}
                 </p>
                 {isActive && (
+<<<<<<< HEAD
                   <p className="mt-1 text-xs text-gray-500">Filtre actif</p>
+=======
+                  <p className="text-xs text-gray-500 mt-1">Filtre actif</p>
+>>>>>>> ede4793d7d73748bbe6dc35b4315c2cdd30cdba3
                 )}
               </div>
               <div className={`p-2 rounded-full ${stat.color}`}>
