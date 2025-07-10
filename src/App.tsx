@@ -7,6 +7,8 @@ import { StockTable } from './components/StockTable';
 import { StockForm } from './components/StockForm';
 import { StockItem } from './lib/sanity';
 
+type FilterType = 'all' | 'inStock' | 'lowStock' | 'outOfStock';
+
 function App() {
   const {
     items,
@@ -22,6 +24,31 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<StockItem | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filtrer les articles selon le filtre actif
+  const getFilteredItems = () => {
+    let filtered = items;
+    
+    // Appliquer le filtre de statut
+    switch (activeFilter) {
+      case 'inStock':
+        filtered = filtered.filter(item => item.quantity > item.minQuantity);
+        break;
+      case 'lowStock':
+        filtered = filtered.filter(item => item.quantity > 0 && item.quantity <= item.minQuantity);
+        break;
+      case 'outOfStock':
+        filtered = filtered.filter(item => item.quantity === 0);
+        break;
+      default:
+        // 'all' - pas de filtre
+        break;
+    }
+    
+    return filtered;
+  };
 
   const handleAddNew = () => {
     setEditingItem(null);
@@ -61,12 +88,25 @@ function App() {
   };
 
   const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setActiveFilter('all'); // Reset filter when searching
     if (query.trim()) {
       searchItems(query);
     } else {
       refreshItems();
     }
   };
+
+  const handleFilterChange = (filter: FilterType) => {
+    setActiveFilter(filter);
+    if (searchQuery) {
+      // Si une recherche est active, la réinitialiser
+      setSearchQuery('');
+      refreshItems();
+    }
+  };
+
+  const filteredItems = getFilteredItems();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -104,18 +144,22 @@ function App() {
         )}
 
         {/* Statistics */}
-        <StockStats items={items} />
+        <StockStats 
+          items={items} 
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
 
         {/* Search and Actions */}
         <SearchBar
           onSearch={handleSearch}
           onAddNew={handleAddNew}
-          placeholder="Rechercher par nom, SKU ou catégorie..."
+          placeholder="Rechercher par nom ou catégorie..."
         />
 
         {/* Stock Table */}
         <StockTable
-          items={items}
+          items={filteredItems}
           onEdit={handleEdit}
           onDelete={handleDelete}
           loading={loading}

@@ -56,9 +56,7 @@ export const StockForm: React.FC<StockFormProps> = ({
     'Electricité',
     'Consommables',
     'Visseries',
-    'Plats',
-    'Cornières',
-    'Finissions',
+    'Habillages',
     'Autres'
   ];
 
